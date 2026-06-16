@@ -1,0 +1,26 @@
+# Large Model Files
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# Media Files
+*.mp4
+*.avi
+*.mov
+
+# Virtual Environments
+visionary_env/
+venv/
+.venv/
+env/
+
+# OS/System files
+.DS_Store
+
+# Local Env
+.env
+
+# Datasets and Outputs
+data/
+outputs/
