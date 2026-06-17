@@ -229,7 +229,8 @@ const PointCloudViewer = ({ pcdUrl, onClose }) => {
     if (!pcdUrl) return;
 
     setLoading(true);
-    fetch(`http://localhost:8080${pcdUrl}`)
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+    fetch(`${backendUrl}${pcdUrl}`)
       .then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();

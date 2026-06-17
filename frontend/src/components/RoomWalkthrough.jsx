@@ -8,7 +8,8 @@ const RoomEnvironment = ({ resultUrl }) => {
   const [tex, setTex] = useState(null);
   useEffect(() => {
     if (!resultUrl) return;
-    const url = resultUrl.startsWith('http') ? resultUrl : `http://localhost:8080${resultUrl}`;
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+    const url = resultUrl.startsWith('http') ? resultUrl : `${backendUrl}${resultUrl}`;
     new THREE.TextureLoader().load(url, t => {
       t.colorSpace = THREE.SRGBColorSpace;
       setTex(t);
@@ -57,8 +58,9 @@ const DepthLayers = ({ resultUrl, depthUrl }) => {
 
   useEffect(() => {
     if (!resultUrl || !depthUrl) return;
-    const rUrl = resultUrl.startsWith('http') ? resultUrl : `http://localhost:8080${resultUrl}`;
-    const dUrl = depthUrl.startsWith('http') ? depthUrl : `http://localhost:8080${depthUrl}`;
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+    const rUrl = resultUrl.startsWith('http') ? resultUrl : `${backendUrl}${resultUrl}`;
+    const dUrl = depthUrl.startsWith('http') ? depthUrl : `${backendUrl}${depthUrl}`;
 
     const colorImg = new Image(); colorImg.crossOrigin = 'anonymous';
     const depthImg = new Image(); depthImg.crossOrigin = 'anonymous';
@@ -241,7 +243,8 @@ const SpatialObject = ({ obj }) => {
 
   useEffect(() => {
     if (!obj.texture_url) return;
-    const url = `http://localhost:8080${obj.texture_url}`;
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+    const url = `${backendUrl}${obj.texture_url}`;
     new THREE.TextureLoader().load(url, t => {
       t.colorSpace = THREE.SRGBColorSpace;
       setTex(t);

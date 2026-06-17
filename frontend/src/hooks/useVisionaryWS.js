@@ -2,6 +2,11 @@ import { useState, useCallback, useRef, useEffect } from "react"
 
 // Multi-fallback WebSocket strategy for local dev stability
 const getWsUrl = () => {
+  const envUrl = import.meta.env.VITE_BACKEND_URL;
+  if (envUrl) {
+    const wsBase = envUrl.replace(/^http/, 'ws');
+    return [wsBase.endsWith('/ws') ? wsBase : `${wsBase}/ws`]
+  }
   if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
     // Try primary direct IP, fallback to localhost name
     return ["ws://127.0.0.1:8080/ws", "ws://localhost:8080/ws"]
@@ -257,7 +262,8 @@ export default function useVisionaryWS() {
       formData.append("style", "luxury")
       formData.append("include_redesign", includeRedesign)
 
-      const response = await fetch("/api/live/frame", {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      const response = await fetch(`${backendUrl}/api/live/frame`, {
         method: "POST",
         body: formData,
       })
