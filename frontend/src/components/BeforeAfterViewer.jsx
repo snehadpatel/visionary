@@ -36,7 +36,7 @@ export default function BeforeAfterViewer({ originalUrl, resultUrl }) {
     <div className="w-full max-w-5xl px-4 mx-auto">
       <div 
         ref={containerRef}
-        className="relative aspect-video rounded-[32px] overflow-hidden glass-card border border-border-bright shadow-2xl cursor-ew-resize select-none"
+        className="relative aspect-video rounded-[32px] overflow-hidden glass-card border border-[var(--border-bright)] shadow-2xl cursor-ew-resize select-none"
         onMouseDown={handleStart}
         onTouchStart={handleStart}
       >
@@ -74,24 +74,24 @@ export default function BeforeAfterViewer({ originalUrl, resultUrl }) {
         </div>
 
         {/* Labels */}
-        <div className="absolute top-6 left-6 z-30 px-3 py-1 glass rounded-full text-[10px] font-bold text-white/50 uppercase tracking-widest border border-white/5 pointer-events-none">
+        <div className="absolute top-6 left-6 z-30 px-3 py-1 glass rounded-full text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest border border-[var(--border-subtle)] pointer-events-none">
           Before
         </div>
-        <div className="absolute top-6 right-6 z-30 px-3 py-1 glass rounded-full text-[10px] font-bold text-accent-primary uppercase tracking-widest border border-accent-primary/20 pointer-events-none">
+        <div className="absolute top-6 right-6 z-30 px-3 py-1 glass rounded-full text-[10px] font-bold text-[var(--accent-primary)] uppercase tracking-widest border border-[var(--accent-primary)]/20 pointer-events-none">
           After
         </div>
       </div>
 
       <div className="flex flex-col items-center justify-between gap-6 mt-8 sm:flex-row">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-white/5 border border-border-subtle">
-            <svg className="w-5 h-5 text-accent-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="p-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+            <svg className="w-5 h-5 text-[var(--accent-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
           <div>
-            <h4 className="text-sm font-bold text-white">Interactive Transformation</h4>
-            <p className="text-xs text-text-muted">Slide to compare architectural changes</p>
+            <h4 className="text-sm font-bold text-[var(--text-heading)]">Before & After comparison</h4>
+            <p className="text-xs text-[var(--text-muted)]">Slide to compare architectural changes</p>
           </div>
         </div>
 
@@ -100,12 +100,12 @@ export default function BeforeAfterViewer({ originalUrl, resultUrl }) {
           whileTap={{ scale: 0.95 }}
           href={resultUrl}
           download="visionary-redesign.png"
-          className="btn btn-secondary glass group"
+          className="btn btn-secondary group"
         >
           <svg className="w-4 h-4 mr-2 transition-transform group-hover:translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1h16v-1M12 12V4m0 8l-4-4m4 4l4-4" />
           </svg>
-          Export Assets
+          Download Redesign
         </motion.a>
       </div>
     </div>

@@ -22,15 +22,15 @@ export default function ChatRefinement({ messages, chatTokens, onSendMessage }) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="w-full max-w-3xl glass-card"
+      className="w-full max-w-3xl glass-card p-6"
     >
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm">
-          ✦
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] flex items-center justify-center text-sm text-white font-bold">
+          ✨
         </div>
         <div>
-          <h3 className="text-lg font-bold">Refine your design</h3>
-          <p className="text-xs text-neutral-500">Chat with Visionary's VLM to adjust your room</p>
+          <h3 className="text-lg font-bold text-[var(--text-heading)]">Refine Your Redesign</h3>
+          <p className="text-xs text-[var(--text-secondary)]">Chat with our AI Interior Designer to adjust your staging</p>
         </div>
       </div>
 
@@ -42,7 +42,7 @@ export default function ChatRefinement({ messages, chatTokens, onSendMessage }) 
         <div className="flex justify-start">
           <div className="chat-bubble-assistant">
             <p className="text-sm leading-relaxed">
-              Your room is ready! Want to refine anything? Try: 'remove the plants', 'make it darker', 'add a bookshelf'
+              Your staging render is ready! Want to make any changes? Try: 'add a wooden coffee table', 'change walls to warm beige', 'add some potted plants'.
             </p>
           </div>
         </div>
@@ -64,10 +64,10 @@ export default function ChatRefinement({ messages, chatTokens, onSendMessage }) 
         {/* Live Streaming Tokens */}
         {chatTokens && (
           <div className="flex justify-start">
-            <div className="chat-bubble-assistant border-indigo-500/30 bg-indigo-500/5">
+            <div className="chat-bubble-assistant border-[var(--accent-primary)]/30 bg-[var(--accent-primary)]/5">
               <p className="text-sm leading-relaxed">
                 {chatTokens}
-                <span className="inline-block w-1 h-4 bg-indigo-400 ml-1 animate-pulse" />
+                <span className="inline-block w-1 h-4 bg-[var(--accent-primary)] ml-1 animate-pulse" />
               </p>
             </div>
           </div>
@@ -79,14 +79,14 @@ export default function ChatRefinement({ messages, chatTokens, onSendMessage }) 
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder='e.g. "add more plants" or "darker walls"'
-          className="flex-1 bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all placeholder-neutral-600"
+          placeholder='e.g. "add a coffee table" or "beige walls"'
+          className="flex-1 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-sm text-[var(--text-heading)] focus:outline-none focus:border-[var(--accent-primary)] focus:ring-1 focus:ring-[var(--accent-primary)]/20 transition-all placeholder-[var(--text-muted)]"
           id="chat-input"
         />
         <button
           onClick={handleSend}
           disabled={!input.trim()}
-          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl text-sm font-semibold transition-colors cursor-pointer shadow-lg shadow-indigo-500/20"
+          className="btn btn-primary disabled:opacity-40 disabled:cursor-not-allowed py-3 px-6 text-sm rounded-xl"
         >
           Send
         </button>

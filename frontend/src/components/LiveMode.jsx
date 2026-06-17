@@ -220,17 +220,17 @@ export default function LiveMode({
               
               {/* Quality vs Speed Toggle */}
               <div className="w-full flex items-center justify-between mb-3 px-1 py-2 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[10px] text-neutral-400 font-bold ml-2">Redesign Engine</span>
+                <span className="text-[10px] text-neutral-400 font-bold ml-2">Staging Engine</span>
                 <div className="flex gap-1 mr-1">
                   <button 
                     onClick={() => setUseSD(false)}
-                    className={`px-2 py-1 rounded-md text-[9px] font-bold transition-all ${!useSD ? "bg-indigo-600 text-white" : "text-neutral-500"}`}
+                    className={`px-2 py-1 rounded-md text-[9px] font-bold transition-all ${!useSD ? "bg-[var(--accent-primary)] text-white" : "text-neutral-500"}`}
                   >
                     ⚡ SPEED
                   </button>
                   <button 
                     onClick={() => setUseSD(true)}
-                    className={`px-2 py-1 rounded-md text-[9px] font-bold transition-all ${useSD ? "bg-purple-600 text-white" : "text-neutral-500"}`}
+                    className={`px-2 py-1 rounded-md text-[9px] font-bold transition-all ${useSD ? "bg-[var(--accent-secondary)] text-white" : "text-neutral-500"}`}
                   >
                     💎 QUALITY
                   </button>
@@ -253,7 +253,7 @@ export default function LiveMode({
         {/* Action Buttons */}
         <div className="flex items-center justify-center gap-4 pb-4">
           
-          {/* Quick Redesign Button */}
+          {/* Quick Staging Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -261,10 +261,10 @@ export default function LiveMode({
             className={`flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm shadow-lg transition-all cursor-pointer ${
               showStyles 
                 ? "bg-white text-black shadow-white/20" 
-                : "bg-indigo-600 text-white shadow-indigo-500/30"
+                : "bg-[var(--accent-primary)] text-white shadow-[var(--glow-primary)]"
             }`}
           >
-            ✦ Redesign
+            ✦ Stage Space
           </motion.button>
 
           {/* Toggle Panel */}
@@ -283,7 +283,7 @@ export default function LiveMode({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setShowRedesign(!showRedesign)}
-            className={`live-action-btn ${showRedesign ? "bg-indigo-500 text-white" : ""}`}
+            className={`live-action-btn ${showRedesign ? "bg-[var(--accent-primary)] text-white" : ""}`}
             title="Toggle Magic Vision (Live Redesign)"
           >
             ✨
@@ -297,7 +297,7 @@ export default function LiveMode({
             className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl transition-all cursor-pointer shadow-lg ${
               voice.isListening
                 ? "bg-red-500 shadow-red-500/30 live-pulse"
-                : "bg-gradient-to-br from-indigo-500 to-purple-600 shadow-indigo-500/30"
+                : "bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] shadow-[var(--glow-primary)]"
             }`}
             title={voice.isListening ? "Stop listening" : "Start speaking"}
           >

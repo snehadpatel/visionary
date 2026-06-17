@@ -1,16 +1,16 @@
 import { motion, AnimatePresence } from "framer-motion"
 
 const STEPS = [
-  { id: "init", label: "Model Initialization", desc: "Loading SceneNet & SD v1.5 onto MPS" },
-  { id: "preprocess", label: "Spatial Preprocessing", desc: "Normalization & Tensor conversion" },
-  { id: "vlm", label: "VLM Analysis", desc: "TinyLlama semantic room understanding" },
-  { id: "detect", label: "Object Extraction", desc: "YOLOv8x furniture identification" },
-  { id: "segment", label: "Instance Segmentation", desc: "SAM vit_h pixel-level masking" },
-  { id: "depth", label: "Depth Mapping", desc: "MiDaS DPT geometric estimation" },
-  { id: "graph", label: "Scene Graphing", desc: "Building spatial relationship matrix" },
-  { id: "budget", label: "Semantic Budgeting", desc: "Priority-weighted cost allocation" },
-  { id: "spec", label: "Design Synthesis", desc: "Assembling stable diffusion prompt" },
-  { id: "gen", label: "Neural Generation", desc: "Stable Diffusion synthesis" },
+  { id: "init", label: "Starting Design Engine", desc: "Loading virtual staging models" },
+  { id: "preprocess", label: "Prepping Image", desc: "Enhancing photo resolution and details" },
+  { id: "vlm", label: "Understanding Your Space", desc: "AI semantic property analysis" },
+  { id: "detect", label: "Detecting Features", desc: "Identifying architectural features and furniture" },
+  { id: "segment", label: "Isolating Areas", desc: "Creating pixel-level element masks" },
+  { id: "depth", label: "Mapping Depth", desc: "Generating 3D depth alignment grid" },
+  { id: "graph", label: "Analyzing Layout", desc: "Constructing spatial relationship map" },
+  { id: "budget", label: "Smart Budgeting", desc: "Allocating funds to design priorities" },
+  { id: "spec", label: "Creating Layout Plan", desc: "Assembling staging design prompt" },
+  { id: "gen", label: "AI Rendering", desc: "Synthesizing redesigned room image" },
 ]
 
 export default function PipelineProgress({ step, previewUrl, sdPreview }) {
@@ -37,7 +37,7 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="relative flex flex-col items-center justify-center min-h-screen px-6 py-20 overflow-hidden bg-bg-obsidian"
+      className="relative flex flex-col items-center justify-center min-h-screen px-6 py-20 overflow-hidden bg-[var(--bg-primary)]"
     >
       <div className="noise-bg" />
       <div className="glow-orb" style={{ top: '-10%', left: '30%', opacity: 0.2 }} />
@@ -54,10 +54,10 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
             >
               <div className="flex items-center gap-3 mb-4">
                 <span className="badge badge-active">Processing</span>
-                <span className="text-[10px] font-mono text-muted uppercase tracking-widest">Job ID: {Math.random().toString(36).substr(2, 9)}</span>
+                <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest">Job ID: {Math.random().toString(36).substr(2, 9)}</span>
               </div>
-              <h2 className="mb-2 text-white">Spatial Synthesis</h2>
-              <p className="text-sm text-secondary">Visionary is reconstructing your room's neural representation.</p>
+              <h2 className="mb-2 text-[var(--text-heading)]">Generating Your Redesign</h2>
+              <p className="text-sm text-[var(--text-secondary)]">Visionary is reconstructing your room's digital representation.</p>
             </motion.div>
 
             <div className="space-y-4">
@@ -73,31 +73,31 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
                   >
                     {/* Progress line */}
                     {i !== STEPS.length - 1 && (
-                      <div className={`absolute left-[11px] top-6 w-[1px] h-8 ${isDone ? 'bg-success' : 'border-dim'}`} />
+                      <div className={`absolute left-[11px] top-6 w-[1px] h-8 ${isDone ? 'bg-[var(--accent-success)]' : 'border-l border-[var(--border-subtle)]'}`} />
                     )}
 
                     <div className="flex flex-col items-center pt-1.5">
                       {isDone ? (
-                        <div className="w-[22px] h-[22px] rounded-full bg-success/10 border border-success/30 flex items-center justify-center">
-                          <svg className="w-3 h-3 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div className="w-[22px] h-[22px] rounded-full bg-[var(--accent-success)]/10 border border-[var(--accent-success)]/30 flex items-center justify-center">
+                          <svg className="w-3 h-3 text-[#059669]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
                       ) : isActive ? (
-                        <div className="w-[22px] h-[22px] rounded-full border border-ether flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-ether animate-pulse" />
+                        <div className="w-[22px] h-[22px] rounded-full border border-[var(--accent-primary)] flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-pulse" />
                         </div>
                       ) : (
-                        <div className="w-[22px] h-[22px] rounded-full border border-border-dim" />
+                        <div className="w-[22px] h-[22px] rounded-full border border-[var(--border-subtle)]" />
                       )}
                     </div>
 
                     <div>
-                      <h4 className={`text-[13px] font-bold tracking-wide uppercase ${isActive ? 'text-white' : 'text-muted'}`}>
+                      <h4 className={`text-[13px] font-bold tracking-wide uppercase ${isActive ? 'text-[var(--text-heading)]' : 'text-[var(--text-muted)]'}`}>
                         {s.label}
                       </h4>
-                      <p className={`text-[11px] font-medium transition-opacity duration-500 ${isActive ? 'text-secondary' : 'text-muted opacity-60'}`}>
-                        {isActive ? s.desc : isDone ? 'Task completed successfully' : 'Queued for execution'}
+                      <p className={`text-[11px] font-medium transition-opacity duration-500 ${isActive ? 'text-[var(--text-secondary)]' : 'text-[var(--text-muted)] opacity-60'}`}>
+                        {isActive ? s.desc : isDone ? 'Task completed successfully' : 'Queued for staging'}
                       </p>
                     </div>
                   </motion.div>
@@ -112,7 +112,7 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="relative aspect-video rounded-3xl overflow-hidden glass-card border border-border-bright shadow-2xl"
+              className="relative aspect-video rounded-3xl overflow-hidden glass-card border border-[var(--border-bright)] shadow-2xl"
             >
               {/* Image Layer */}
               <AnimatePresence mode="wait">
@@ -131,14 +131,14 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
               <div className="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-3">
-                    <div className="px-3 py-1 glass rounded-full text-[10px] font-bold text-white tracking-widest uppercase flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-error animate-pulse" />
-                      Live Stream
+                    <div className="px-3 py-1 glass rounded-full text-[10px] font-bold text-[var(--text-primary)] tracking-widest uppercase flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-error)] animate-pulse" />
+                      Live Preview
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] font-mono text-white/50 uppercase">Neural Iterations</p>
-                    <p className="text-xl font-mono text-white leading-none">
+                    <p className="text-[10px] font-mono text-[var(--text-secondary)]/50 uppercase">Rendering Steps</p>
+                    <p className="text-xl font-mono text-[var(--text-heading)] leading-none">
                       {sdPreview ? Math.floor(Math.random() * 10) + 1 : '0'}/38
                     </p>
                   </div>
@@ -146,12 +146,12 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
 
                 <div className="flex justify-between items-end">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-mono text-white/30 uppercase">Engine Architecture</p>
-                    <p className="text-xs font-medium text-white/60">SD v1.5 &middot; ControlNet Canny &middot; 32 Steps</p>
+                    <p className="text-[10px] font-mono text-[var(--text-muted)]/30 uppercase">Rendering Pipeline</p>
+                    <p className="text-xs font-medium text-[var(--text-secondary)]/60">SD v1.5 &middot; ControlNet Canny &middot; 38 Steps</p>
                   </div>
-                  <div className="w-24 h-[2px] bg-white/10 rounded-full overflow-hidden">
+                  <div className="w-24 h-[2px] bg-[var(--border-subtle)] rounded-full overflow-hidden">
                     <motion.div 
-                      className="h-full bg-ether"
+                      className="h-full bg-[var(--accent-primary)]"
                       animate={{ x: ["-100%", "100%"] }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                     />
@@ -160,7 +160,7 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
               </div>
 
               {/* Grid overlay */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--color-border-dim) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+              <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--border-dim) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
             </motion.div>
 
             {/* Hardware Status */}
@@ -168,20 +168,20 @@ export default function PipelineProgress({ step, previewUrl, sdPreview }) {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="mt-8 flex items-center justify-between px-6 py-4 glass-card border border-border-dim"
+              className="mt-8 flex items-center justify-between px-6 py-4 glass-card border border-[var(--border-dim)]"
             >
               <div className="flex gap-10">
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-muted mb-1">Compute Device</p>
-                  <p className="text-xs font-bold text-white">Apple MPS (GPU)</p>
+                  <p className="text-[10px] uppercase font-bold text-[var(--text-muted)] mb-1">Compute Engine</p>
+                  <p className="text-xs font-bold text-[var(--text-heading)]">Apple Silicon (MPS)</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-muted mb-1">Inference Latency</p>
-                  <p className="text-xs font-bold text-white">42ms / tok</p>
+                  <p className="text-[10px] uppercase font-bold text-[var(--text-muted)] mb-1">Inference Latency</p>
+                  <p className="text-xs font-bold text-[var(--text-heading)]">42ms / tok</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-muted mb-1">Memory Pressure</p>
-                  <p className="text-xs font-bold text-success">Normal</p>
+                  <p className="text-[10px] uppercase font-bold text-[var(--text-muted)] mb-1">Memory Pressure</p>
+                  <p className="text-xs font-bold text-[#059669]">Normal</p>
                 </div>
               </div>
             </motion.div>

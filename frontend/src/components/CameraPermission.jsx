@@ -28,7 +28,7 @@ export default function CameraPermission({ onAllow, onBack }) {
         </motion.div>
       )}
       {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[var(--accent-primary)]/5 blur-[120px] pointer-events-none" />
 
       <motion.div
         initial={{ y: 30, opacity: 0 }}
@@ -41,16 +41,16 @@ export default function CameraPermission({ onAllow, onBack }) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", delay: 0.2, stiffness: 200 }}
-          className="w-24 h-24 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center mx-auto mb-8"
+          className="w-24 h-24 rounded-3xl bg-gradient-to-br from-[var(--accent-primary)]/20 to-[var(--accent-secondary)]/20 border border-[var(--accent-primary)]/30 flex items-center justify-center mx-auto mb-8"
         >
           <span className="text-5xl">📷</span>
         </motion.div>
 
-        <h2 className="text-3xl font-bold mb-3">Camera Access Needed</h2>
-        <p className="text-neutral-400 mb-8 leading-relaxed">
-          Visionary Live uses your camera to analyze rooms in{" "}
-          <span className="text-indigo-400 font-medium">real-time</span>. Our AI
-          will detect furniture, identify styles, and suggest redesigns as you
+        <h2 className="text-3xl font-bold mb-3 text-[var(--text-heading)]">Camera Access Needed</h2>
+        <p className="text-[var(--text-secondary)] mb-8 leading-relaxed">
+          Visionary Live uses your camera to stage rooms in{" "}
+          <span className="text-[var(--accent-primary)] font-semibold">real-time</span>. Our AI
+          will detect furniture, identify styles, and suggest virtual staging as you
           point your camera around.
         </p>
 
@@ -70,45 +70,45 @@ export default function CameraPermission({ onAllow, onBack }) {
             {
               icon: "🗣️",
               title: "Voice Chat",
-              desc: "Talk to AI about what you see for redesign ideas",
+              desc: "Talk to AI about what you see for staging ideas",
             },
           ].map((item) => (
             <div
               key={item.title}
-              className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5"
+              className="flex items-start gap-3 p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]"
             >
               <span className="text-xl mt-0.5">{item.icon}</span>
               <div>
-                <p className="text-sm font-semibold text-white">{item.title}</p>
-                <p className="text-xs text-neutral-500">{item.desc}</p>
+                <p className="text-sm font-semibold text-[var(--text-heading)]">{item.title}</p>
+                <p className="text-xs text-[var(--text-muted)]">{item.desc}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Debug Info (Helpful for mobile) */}
-        <div className="mt-4 p-3 rounded-xl bg-black/40 border border-white/5 text-[10px] font-mono text-left space-y-1">
-          <p className="text-neutral-500 uppercase font-bold mb-1">System Diagnostics</p>
+        <div className="mt-4 p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[10px] font-mono text-left space-y-1">
+          <p className="text-[var(--text-muted)] uppercase font-bold mb-1">System Diagnostics</p>
           <div className="flex justify-between">
             <span>Secure Context:</span>
-            <span className={isSecure ? "text-green-500" : "text-red-500"}>{isSecure ? "YES" : "NO"}</span>
+            <span className={isSecure ? "text-green-600 font-bold" : "text-red-500"}>{isSecure ? "YES" : "NO"}</span>
           </div>
           <div className="flex justify-between">
             <span>MediaDevices Support:</span>
-            <span className={!!navigator.mediaDevices ? "text-green-500" : "text-red-500"}>{!!navigator.mediaDevices ? "YES" : "NO"}</span>
+            <span className={!!navigator.mediaDevices ? "text-green-600 font-bold" : "text-red-500"}>{!!navigator.mediaDevices ? "YES" : "NO"}</span>
           </div>
           <div className="flex justify-between">
             <span>Protocol:</span>
-            <span className="text-indigo-400">{window.location.protocol}</span>
+            <span className="text-[var(--accent-primary)]">{window.location.protocol}</span>
           </div>
           <div className="flex justify-between">
             <span>Hostname:</span>
-            <span className="text-indigo-400">{window.location.hostname}</span>
+            <span className="text-[var(--accent-primary)]">{window.location.hostname}</span>
           </div>
         </div>
 
         {/* Privacy note */}
-        <div className="flex items-center gap-2 justify-center my-6 text-xs text-neutral-600">
+        <div className="flex items-center gap-2 justify-center my-6 text-xs text-[var(--text-muted)]">
           <span>🔒</span>
           <span>
             Camera feed is processed locally. Nothing is stored.
@@ -121,14 +121,14 @@ export default function CameraPermission({ onAllow, onBack }) {
           whileTap={{ scale: 0.97 }}
           onClick={onAllow}
           disabled={!isSecure && window.location.hostname !== "localhost"}
-          className={`btn-primary w-full py-4 text-lg rounded-2xl glow-primary mb-3 ${!isSecure ? "opacity-50 grayscale" : ""}`}
+          className={`btn btn-primary w-full h-[56px] text-[15px] rounded-2xl mb-3 ${!isSecure ? "opacity-50 grayscale cursor-not-allowed" : ""}`}
         >
           {isSecure ? "Allow Camera Access" : "HTTPS Required for Mobile"}
         </motion.button>
 
         <button
           onClick={onBack}
-          className="w-full text-center text-sm text-neutral-600 hover:text-neutral-400 transition-colors cursor-pointer py-2"
+          className="w-full text-center text-sm text-[var(--text-muted)] hover:text-[var(--text-heading)] transition-colors cursor-pointer py-2"
         >
           &larr; Go back
         </button>

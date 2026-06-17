@@ -3,14 +3,13 @@ export default function BudgetInput({ value, onChange }) {
 
   return (
     <div className="space-y-4">
-      <label className="text-[10px] font-bold uppercase tracking-widest text-muted flex items-center gap-2">
-        <span className="w-1 h-1 rounded-full bg-ether" />
+      <label className="text-[11px] font-semibold uppercase tracking-wide flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-primary)' }} />
         Budget Allocation (INR)
       </label>
 
       <div className="relative group">
-        <div className="absolute inset-0 bg-ether/5 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
-        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-muted text-xl font-medium">
+        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-medium" style={{ color: 'var(--text-muted)' }}>
           ₹
         </span>
         <input
@@ -18,7 +17,14 @@ export default function BudgetInput({ value, onChange }) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="e.g. 30,000"
-          className="relative w-full bg-surface border border-border-dim rounded-2xl pl-12 pr-6 py-4 text-white text-xl font-bold placeholder-white/10 focus:outline-none focus:border-ether focus:ring-4 focus:ring-ether/5 transition-all"
+          className="relative w-full rounded-2xl pl-12 pr-6 py-4 text-xl font-bold transition-all outline-none"
+          style={{ 
+            background: 'var(--bg-surface)', 
+            border: '1px solid var(--border-subtle)', 
+            color: 'var(--text-heading)',
+          }}
+          onFocus={(e) => { e.target.style.borderColor = 'var(--accent-primary)'; e.target.style.boxShadow = '0 0 0 3px var(--glow-primary)'; }}
+          onBlur={(e) => { e.target.style.borderColor = 'var(--border-subtle)'; e.target.style.boxShadow = 'none'; }}
           id="budget-input"
         />
       </div>
@@ -28,11 +34,13 @@ export default function BudgetInput({ value, onChange }) {
           <button
             key={p}
             onClick={() => onChange(String(p))}
-            className={`px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider border transition-all duration-300 cursor-pointer ${
-              value === String(p)
-                ? "bg-ether border-ether text-white shadow-lg shadow-ether/20"
-                : "bg-surface border-border-dim text-muted hover:border-ether/50 hover:text-primary"
-            }`}
+            className="px-4 py-2 rounded-xl text-[11px] font-semibold tracking-wide transition-all duration-300 cursor-pointer"
+            style={{
+              background: value === String(p) ? 'rgba(167,139,250,0.12)' : 'var(--bg-surface)',
+              border: `1px solid ${value === String(p) ? 'rgba(167,139,250,0.4)' : 'var(--border-subtle)'}`,
+              color: value === String(p) ? 'var(--accent-primary)' : 'var(--text-muted)',
+              boxShadow: value === String(p) ? '0 4px 12px var(--glow-primary)' : 'none',
+            }}
           >
             ₹{p.toLocaleString("en-IN")}
           </button>
