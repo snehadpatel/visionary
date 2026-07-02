@@ -47,6 +47,7 @@ export default function useVisionaryWS() {
 
   const urlIndexRef = useRef(0)
   const reconnectTimeoutRef = useRef(null)
+  const reconnectDelayRef = useRef(2000)
 
   const connect = useCallback(() => {
     if (socketRef.current) return
@@ -61,6 +62,7 @@ export default function useVisionaryWS() {
       setSocket(ws)
       socketRef.current = ws
       urlIndexRef.current = 0 // Reset on success
+      reconnectDelayRef.current = 2000 // Reset backoff delay
       setError(null)
     }
 
@@ -153,9 +155,11 @@ export default function useVisionaryWS() {
       urlIndexRef.current = (urlIndexRef.current + 1) % WS_URLS.length
       
       // Retry with backoff
+      const currentDelay = reconnectDelayRef.current
       reconnectTimeoutRef.current = setTimeout(() => {
         connect()
-      }, 2000)
+        reconnectDelayRef.current = Math.min(currentDelay * 1.5, 30000)
+      }, currentDelay)
     }
 
     ws.onerror = (err) => {
@@ -255,11 +259,11 @@ export default function useVisionaryWS() {
     }))
   }, [])
 
-  const processHttpFrame = useCallback(async (frameDataUrl, includeRedesign = true) => {
+  const processHttpFrame = useCallback(async (frameDataUrl, style = "luxury", includeRedesign = true) => {
     try {
       const formData = new FormData()
       formData.append("image_b64", frameDataUrl)
-      formData.append("style", "luxury")
+      formData.append("style", style)
       formData.append("include_redesign", includeRedesign)
 
       const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
