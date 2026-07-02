@@ -23,19 +23,20 @@ export default function LiveMode({
   isLive,
   processHttpFrame,
   submitRedesign,
+  sendVoiceInput,
   onExit,
 }) {
   const [showPanel, setShowPanel] = useState(true)
   const [showStyles, setShowStyles] = useState(false)
   const [showRedesign, setShowRedesign] = useState(true) // Toggle live redesigned frame overlay
   const [useSD, setUseSD] = useState(false) // Toggle between High-Speed (UNet) and High-Quality (SD)
+  const [liveStyle, setLiveStyle] = useState("scandinavian")
+  const liveStyleRef = useRef("scandinavian")
 
-  const handleRedesign = useCallback((style) => {
-    // Trigger the actual generation pipeline from the live frame
-    // Pass the useSD flag to determine which neural engine to run
-    submitRedesign(30000, style, "", useSD)
-    setShowStyles(false)
-  }, [submitRedesign, useSD])
+  const handleSelectStyle = useCallback((style) => {
+    setLiveStyle(style)
+    liveStyleRef.current = style
+  }, [])
 
   const [clientId] = useState(() => `live_${Math.random().toString(36).substr(2, 9)}`)
 
@@ -57,7 +58,7 @@ export default function LiveMode({
     height: 480,
     captureIntervalMs: 2000,
     quality: 0.5,
-    onFrame: (frame) => processHttpFrame(frame, showRedesign),
+    onFrame: (frame) => processHttpFrame(frame, liveStyleRef.current, showRedesign),
   })
 
   // Voice hook — handles STT/TTS
@@ -237,15 +238,29 @@ export default function LiveMode({
                 </div>
               </div>
 
-              {["scandinavian", "industrial", "bohemian", "japandi", "mid-century", "luxury"].map((style) => (
+               {["scandinavian", "industrial", "bohemian", "japandi", "mid-century", "luxury"].map((style) => (
                 <button
                   key={style}
-                  onClick={() => handleRedesign(style)}
-                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors capitalize whitespace-nowrap cursor-pointer"
+                  onClick={() => handleSelectStyle(style)}
+                  className={`px-3 py-1.5 rounded-lg text-white text-xs font-medium transition-colors capitalize whitespace-nowrap cursor-pointer ${
+                    liveStyle === style 
+                      ? "bg-[var(--accent-primary)] border border-white/20 font-bold" 
+                      : "bg-white/10 hover:bg-white/20"
+                  }`}
                 >
                   {style.replace("-", " ")}
                 </button>
               ))}
+
+              <button
+                onClick={() => {
+                  submitRedesign(30000, liveStyle, "", useSD)
+                  setShowStyles(false)
+                }}
+                className="w-full mt-3 py-2.5 rounded-xl text-[11px] font-bold text-white tracking-wider uppercase cursor-pointer transition-all bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] shadow-[var(--glow-primary)] hover:brightness-110"
+              >
+                ✦ Generate HD Project ✦
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

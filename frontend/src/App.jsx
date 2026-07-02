@@ -117,6 +117,7 @@ export default function App() {
             isLive={isLive}
             processHttpFrame={processHttpFrame}
             submitRedesign={submitRedesign}
+            sendVoiceInput={sendVoiceInput}
             onExit={() => setStage("landing")}
           />
         )}
