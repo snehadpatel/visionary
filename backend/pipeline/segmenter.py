@@ -19,21 +19,21 @@ else:
 
 STRUCTURAL_ELEMENTS = {"window", "door"}
 
-# SAM vit_b for balanced quality and speed (375MB weights)
+# SAM vit_h for best quality (2.5GB weights)
 _predictor = None
-_sam_checkpoint = str(Path(__file__).resolve().parent.parent.parent / "models" / "sam_vit_b_01ec17.pth")
+_sam_checkpoint = str(Path(__file__).resolve().parent.parent.parent / "models" / "sam_vit_h_4b8939.pth")
 
 def _get_predictor():
     global _predictor
     if _predictor is None:
-        print(f"[Segmenter] Loading SAM vit_b on {_device}...")
+        print(f"[Segmenter] Loading SAM vit_h on {_device}...")
         try:
-            _sam = sam_model_registry["vit_b"](checkpoint=_sam_checkpoint)
+            _sam = sam_model_registry["vit_h"](checkpoint=_sam_checkpoint)
             _sam.to(_device)
             _predictor = SamPredictor(_sam)
-            print("[Segmenter] SAM vit_b ready.")
+            print("[Segmenter] SAM vit_h ready.")
         except FileNotFoundError:
-            print(f"[Segmenter] SAM vit_b checkpoint not found at {_sam_checkpoint}")
+            print(f"[Segmenter] SAM vit_h checkpoint not found at {_sam_checkpoint}")
             print("[Segmenter] Falling back to fast bbox-masking.")
             _predictor = None
         except Exception as e:

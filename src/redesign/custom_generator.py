@@ -86,8 +86,8 @@ class CustomNeuralGenerator:
             try:
                 from src.redesign.style_engine import StyleEngine
                 # Assuming StyleEngine can be initialized without args or with default path
-                se = StyleEngine("/Users/snehapatel/visionary/data/furniture_index.json", 
-                                "/Users/snehapatel/visionary/data/style_signatures.json")
+                se = StyleEngine("/Users/snehapatel/visionary/data/annotations/furniture_index.json", 
+                                "/Users/snehapatel/visionary/data/annotations/style_signatures.json")
                 inspiration = se.get_style_inspiration(target_style)
                 target_palette = inspiration.get("palette")
             except:
@@ -120,7 +120,7 @@ class CustomNeuralGenerator:
         rgb_tensor = self.transform(inpainted_pil).to(self.device)
         
         # 3. Depth Fix (Near=1.0)
-        depth_norm = 1.0 - (depth_map / 10.0).clip(0, 1)
+        depth_norm = 1.0 - (depth_map / 255.0).clip(0, 1)
         depth_pil = Image.fromarray((depth_norm * 255).astype(np.uint8))
         depth_tensor = self.transform(depth_pil).to(self.device)[0:1, :, :]
         

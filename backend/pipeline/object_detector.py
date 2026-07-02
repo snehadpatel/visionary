@@ -26,6 +26,7 @@ def _get_model():
         device = "mps" if torch.backends.mps.is_available() else "cpu"
         _model = YOLOWorld("yolov8s-worldv2.pt")
         _model.to(device)
+        _model.set_classes(FURNITURE_PROMPT)
         print(f"[Object Detector] YOLO-World ready on {device} with {len(FURNITURE_PROMPT)} classes.")
     return _model
 
