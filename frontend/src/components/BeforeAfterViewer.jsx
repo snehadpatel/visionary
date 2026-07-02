@@ -13,7 +13,7 @@ export default function BeforeAfterViewer({ originalUrl, resultUrl }) {
     const x = e.type.includes('touch') ? e.touches[0].clientX : e.clientX
     const position = ((x - rect.left) / rect.width) * 100
     
-    setSliderPosition(Math.min(Math.max(position, 0), 100))
+    setSliderPosition(Math.min(Math.max(position, 0.1), 99.9))
   }
 
   const handleStart = () => (isDragging.current = true)

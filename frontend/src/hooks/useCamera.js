@@ -72,8 +72,8 @@ export default function useCamera({
     }
   }, [facingMode, width, height, captureIntervalMs, onFrame])
 
-  // Stop the camera
-  const stopCamera = useCallback(() => {
+  // Stop the camera stream but preserve active state
+  const stopStream = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop())
       streamRef.current = null
@@ -82,8 +82,13 @@ export default function useCamera({
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
-    setIsActive(false)
   }, [])
+
+  // Stop the camera completely
+  const stopCamera = useCallback(() => {
+    stopStream()
+    setIsActive(false)
+  }, [stopStream])
 
   // Capture a single frame as base64 JPEG
   const captureFrame = useCallback(() => {
@@ -111,10 +116,10 @@ export default function useCamera({
     const newMode = facingMode === "environment" ? "user" : "environment"
     setFacingMode(newMode)
     if (isActive) {
-      stopCamera()
+      stopStream()
       // Restart will happen due to facingMode change
     }
-  }, [facingMode, isActive, stopCamera])
+  }, [facingMode, isActive, stopStream])
 
   // Cleanup on unmount
   useEffect(() => {
