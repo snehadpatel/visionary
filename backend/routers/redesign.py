@@ -33,6 +33,19 @@ jobs = {}
 conversations = {}  # job_id -> conversation history
 
 
+def prune_old_jobs():
+    """Remove jobs and conversations older than 1 hour to free RAM (PIL Image objects)."""
+    import time
+    now = time.time()
+    expired = [jid for jid, job in jobs.items() if now - job.get("created_at", 0) > 3600]
+    for jid in expired:
+        jobs.pop(jid, None)
+        conversations.pop(jid, None)
+    if expired:
+        import gc
+        gc.collect()
+
+
 @router.post("/redesign")
 async def redesign_room(
     background_tasks: BackgroundTasks,
@@ -45,8 +58,10 @@ async def redesign_room(
     Start a new room redesign job.
     Returns a job_id for polling status.
     """
+    import time
+    prune_old_jobs()
     job_id = str(uuid.uuid4())
-    jobs[job_id] = {"status": "queued", "step": "", "result": None}
+    jobs[job_id] = {"status": "queued", "step": "", "result": None, "created_at": time.time()}
     conversations[job_id] = []
     image_bytes = await image.read()
     background_tasks.add_task(

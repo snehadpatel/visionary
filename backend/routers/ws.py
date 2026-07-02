@@ -43,6 +43,32 @@ live_redesign_locks: dict[str, bool] = {}
 last_live_redesign_time: dict[str, float] = {}
 last_vlm_time: dict[str, float] = {}
 
+# Active asyncio background tasks per client
+active_tasks: dict[str, set[asyncio.Task]] = {}
+
+
+def start_task(client_id: str, coro) -> asyncio.Task:
+    """Spawn a background task and register it for cancellation on client disconnect."""
+    task = asyncio.create_task(coro)
+    active_tasks.setdefault(client_id, set()).add(task)
+    task.add_done_callback(lambda t: active_tasks.get(client_id, set()).discard(t))
+    return task
+
+
+def cleanup_client(client_id: str):
+    """Clean up connection, session state, and cancel all running background tasks."""
+    manager.disconnect(client_id)
+    sessions.pop(client_id, None)
+    live_analyzers.pop(client_id, None)
+    
+    # Cancel any active tasks
+    tasks = active_tasks.pop(client_id, None)
+    if tasks:
+        for t in tasks:
+            if not t.done():
+                t.cancel()
+
+
 def safe_serialize(obj):
     """Recursively convert tensors/numpy to serializable types."""
     if isinstance(obj, dict):
@@ -58,6 +84,7 @@ def safe_serialize(obj):
     elif isinstance(obj, np.floating):
         return float(obj)
     return obj
+
 
 @router.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
@@ -89,10 +116,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
 
             elif msg_type == "submit_redesign":
                 # Run full pipeline in background — non-blocking
-                asyncio.create_task(run_full_pipeline(client_id, data))
+                start_task(client_id, run_full_pipeline(client_id, data))
 
             elif msg_type == "chat_message":
-                asyncio.create_task(handle_chat(client_id, data))
+                start_task(client_id, handle_chat(client_id, data))
 
             # ─── Live Mode Messages ───
 
@@ -100,10 +127,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 await handle_start_live(client_id)
 
             elif msg_type == "live_frame":
-                asyncio.create_task(handle_live_frame(client_id, data))
+                start_task(client_id, handle_live_frame(client_id, data))
 
             elif msg_type == "voice_input":
-                asyncio.create_task(handle_voice_input(client_id, data))
+                start_task(client_id, handle_voice_input(client_id, data))
 
             elif msg_type == "stop_live_session":
                 await handle_stop_live(client_id)
@@ -112,14 +139,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 await manager.send(client_id, "pong", {})
 
     except WebSocketDisconnect:
-        manager.disconnect(client_id)
-        sessions.pop(client_id, None)
-        live_analyzers.pop(client_id, None)
+        cleanup_client(client_id)
     except Exception as e:
         print(f"WS Error for {client_id}: {e}")
-        manager.disconnect(client_id)
-        sessions.pop(client_id, None)
-        live_analyzers.pop(client_id, None)
+        cleanup_client(client_id)
 
 async def handle_upload(client_id: str, data: dict):
     """
