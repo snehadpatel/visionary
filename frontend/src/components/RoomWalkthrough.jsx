@@ -10,10 +10,23 @@ const RoomEnvironment = ({ resultUrl }) => {
     if (!resultUrl) return;
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
     const url = resultUrl.startsWith('http') ? resultUrl : `${backendUrl}${resultUrl}`;
+    let active = true;
+    let loadedTex = null;
+
     new THREE.TextureLoader().load(url, t => {
-      t.colorSpace = THREE.SRGBColorSpace;
-      setTex(t);
+      if (active) {
+        t.colorSpace = THREE.SRGBColorSpace;
+        setTex(t);
+        loadedTex = t;
+      } else {
+        t.dispose();
+      }
     });
+
+    return () => {
+      active = false;
+      if (loadedTex) loadedTex.dispose();
+    };
   }, [resultUrl]);
 
   if (!tex) return null;
@@ -62,12 +75,16 @@ const DepthLayers = ({ resultUrl, depthUrl }) => {
     const rUrl = resultUrl.startsWith('http') ? resultUrl : `${backendUrl}${resultUrl}`;
     const dUrl = depthUrl.startsWith('http') ? depthUrl : `${backendUrl}${depthUrl}`;
 
+    let active = true;
+    let createdTextures = [];
+
     const colorImg = new Image(); colorImg.crossOrigin = 'anonymous';
     const depthImg = new Image(); depthImg.crossOrigin = 'anonymous';
     let loaded = 0;
 
     const process = () => {
       if (++loaded < 2) return;
+      if (!active) return;
       const W = 256, H = 256;
       // Draw color
       const cc = document.createElement('canvas'); cc.width = W; cc.height = H;
@@ -101,6 +118,7 @@ const DepthLayers = ({ resultUrl, depthUrl }) => {
         lctx.putImageData(imgData, 0, 0);
         const tex = new THREE.CanvasTexture(lc);
         tex.colorSpace = THREE.SRGBColorSpace;
+        createdTextures.push(tex);
         return { tex, z: def.z, opacity: def.opacity };
       });
       setLayers(result);
@@ -110,6 +128,11 @@ const DepthLayers = ({ resultUrl, depthUrl }) => {
     depthImg.onload = process;
     colorImg.src = rUrl;
     depthImg.src = dUrl;
+
+    return () => {
+      active = false;
+      createdTextures.forEach(t => t.dispose());
+    };
   }, [resultUrl, depthUrl]);
 
   // Subtle floating animation
@@ -245,10 +268,23 @@ const SpatialObject = ({ obj }) => {
     if (!obj.texture_url) return;
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
     const url = `${backendUrl}${obj.texture_url}`;
+    let active = true;
+    let loadedTex = null;
+
     new THREE.TextureLoader().load(url, t => {
-      t.colorSpace = THREE.SRGBColorSpace;
-      setTex(t);
+      if (active) {
+        t.colorSpace = THREE.SRGBColorSpace;
+        setTex(t);
+        loadedTex = t;
+      } else {
+        t.dispose();
+      }
     });
+
+    return () => {
+      active = false;
+      if (loadedTex) loadedTex.dispose();
+    };
   }, [obj.texture_url]);
 
   if (!tex) return null;
